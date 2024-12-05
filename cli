@@ -27,6 +27,14 @@ devsync() {
     uv pip sync dev-requirements.txt
 }
 
+lint() {
+    source .venv/bin/activate
+    ruff check .
+    ruff format .
+    mypy .
+}
+
+
 wrap() {
     . .venv/bin/activate
     "${@:2}"
@@ -54,6 +62,9 @@ case "$1" in
         ;;
     devsync)
         devsync
+        ;;
+    lint)
+        lint
         ;;
     wrap)
         wrap $@
