@@ -7,6 +7,7 @@ fast spin off
 ## bootstrap
 
 ```bash
+./cli installuv
 ./cli devcompile
 ./cli setup
 ```

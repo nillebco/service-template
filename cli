@@ -10,6 +10,13 @@ installuv() {
     fi
 }
 
+id() {
+    . .venv/bin/activate
+    VERSION=$(python -m api.version)
+    APP_NAME=$(python -m api.app_name)
+    echo "$APP_NAME $VERSION"
+}
+
 setup() {
     uv venv
     source .venv/bin/activate
@@ -45,14 +52,31 @@ serve() {
     uvicorn api.app:app --reload --log-level debug --port 8021
 }
 
+build_image() {
+    set -eux
+    . .venv/bin/activate
+    VERSION=$(python -m api.version)
+    APP_NAME=$(python -m api.app_name)
+    docker build -t nillebco/$APP_NAME:$VERSION .
+    if [ -f $APP_NAME.tar.gz ]; then
+        rm $APP_NAME.tar.gz
+    fi
+    docker save --format oci-archive nillebco/$APP_NAME:$VERSION > $APP_NAME.tar
+    gzip $APP_NAME.tar
+    sha256sum $APP_NAME.gz
+}
+
 zapscan() {
     mkdir data
-    docker run -v $(pwd)/data:/zap/wrk:rw -t owasp/zap2docker-stable zap-api-scan.py -t http://host.docker.internal:8021/openapi.json -f openapi -r workspace_knack_users_sync-service.html
+    docker run -v $(pwd)/data:/zap/wrk:rw -t owasp/zap2docker-stable zap-api-scan.py -t http://host.docker.internal:17581/openapi.json -f openapi -r api-scan.html
 }
 
 case "$1" in
     installuv)
         installuv
+        ;;
+    id)
+        id
         ;;
     setup)
         setup
@@ -68,6 +92,9 @@ case "$1" in
         ;;
     wrap)
         wrap $@
+        ;;
+    build_image)
+        build_image
         ;;
     zapscan)
         zapscan
