@@ -1,0 +1,8 @@
+httpx
+pyyaml
+fastapi
+uvicorn[standard]
+sqlmodel
+asyncpg
+sqlalchemy
+jinja2

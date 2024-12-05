@@ -1,0 +1,66 @@
+#!/bin/bash
+
+installuv() {
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        brew install uv
+    else
+        echo "Unsupported operating system."
+    fi
+}
+
+setup() {
+    uv venv
+    uv pip install -r requirements.txt
+}
+
+devcompile() {
+    uv pip compile requirements.in > requirements.txt
+}
+
+devsync() {
+    uv pip sync requirements.txt
+}
+
+wrap() {
+    . .venv/bin/activate
+    "${@:2}"
+}
+
+serve() {
+    . .venv/bin/activate
+    uvicorn app.main:app --reload --log-level debug --port 8021
+}
+
+zapscan() {
+    mkdir data
+    docker run -v $(pwd)/data:/zap/wrk:rw -t owasp/zap2docker-stable zap-api-scan.py -t http://host.docker.internal:8021/openapi.json -f openapi -r workspace_knack_users_sync-service.html
+}
+
+case "$1" in
+    installuv)
+        installuv
+        ;;
+    setup)
+        setup
+        ;;
+    devcompile)
+        devcompile
+        ;;
+    devsync)
+        devsync
+        ;;
+    wrap)
+        wrap $@
+        ;;
+    zapscan)
+        zapscan
+        ;;
+    serve)
+        serve
+        ;;
+    *)
+        echo "Error: Invalid command. Available commands: setup | devcompile | devsync | serve"
+        ;;
+esac
