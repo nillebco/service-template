@@ -12,6 +12,7 @@ installuv() {
 
 setup() {
     uv venv
+    source .venv/bin/activate
     uv pip install -r requirements.txt
 }
 
@@ -21,6 +22,7 @@ devcompile() {
 }
 
 devsync() {
+    source .venv/bin/activate
     uv pip sync requirements.txt
     uv pip sync dev-requirements.txt
 }
@@ -32,7 +34,7 @@ wrap() {
 
 serve() {
     . .venv/bin/activate
-    uvicorn app.main:app --reload --log-level debug --port 8021
+    uvicorn api.app:app --reload --log-level debug --port 8021
 }
 
 zapscan() {

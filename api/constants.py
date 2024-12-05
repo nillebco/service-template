@@ -1,6 +1,7 @@
 import sys
 import os
 
+APP_NAME = "podcasts-app"
 IS_TESTING = "pytest" in sys.modules
 IS_DEV = os.getenv("IS_DEV")
 DATA_FOLDER = "data"

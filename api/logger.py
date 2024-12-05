@@ -1,8 +1,8 @@
 import logging
-
+from .constants import APP_NAME
 
 def init_logger():
-    logger = logging.getLogger("signal-ai-bot")
+    logger = logging.getLogger(APP_NAME)
     logger.setLevel(logging.INFO)
     # set a format that includes the timestamp and the log level
     formatter = logging.Formatter(
