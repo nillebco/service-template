@@ -13,7 +13,7 @@ installuv() {
 setup() {
     uv venv
     source .venv/bin/activate
-    uv pip install -r requirements.txt
+    uv pip install -r requirements.txt -r dev-requirements.txt
 }
 
 devcompile() {

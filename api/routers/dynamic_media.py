@@ -18,4 +18,3 @@ async def media_get(request: Request, media_id: str):
 async def media_head(request: Request, media_id: str):
     uri = "/test"
     return RedirectResponse(uri)
-

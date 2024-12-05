@@ -19,7 +19,6 @@ origins = ["*"]
 NOT_AUTHORIZED = "Not Authorized"
 
 
-
 async def long_running_process_async():
     get_secret("precious")
     while True:

@@ -65,7 +65,7 @@ async def execute_statement(session: AsyncSession, stmt: SelectOfScalar[_T]):
 
 def transport_sender_conversation_id_from_session_id(
     session_id: str,
-) -> tuple[str, str, str]:
+) -> tuple[str, str, str | None]:
     parts = session_id.split(".")
     if len(parts) == 3:
         transport, sender, conversation_id = parts
@@ -83,7 +83,7 @@ def transport_sender_from_session_id(session_id: str) -> tuple[str, str]:
     return transport, sender
 
 
-def conversation_id_from_session_id(session_id: str) -> str:
+def conversation_id_from_session_id(session_id: str) -> str | None:
     _, _, conversation_id = transport_sender_conversation_id_from_session_id(session_id)
     return conversation_id
 

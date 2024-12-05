@@ -1,6 +1,7 @@
 import logging
 from .constants import APP_NAME
 
+
 def init_logger():
     logger = logging.getLogger(APP_NAME)
     logger.setLevel(logging.INFO)

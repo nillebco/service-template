@@ -26,10 +26,10 @@ def get_secret(lowercase_secret_name: str, default=None):
     return secret
 
 
-IMPORTANT_SECRET = get_secret("important_secret")
+DATABASE_URL = get_secret("DATABASE_URL")
 
 checks = {
-    "IMPORTANT_SECRET": IMPORTANT_SECRET,
+    "DATABASE_URL": DATABASE_URL,
 }
 
 for var_name, var_value in checks.items():

@@ -4,6 +4,7 @@ from sqlmodel import JSON, Column, Field, SQLModel
 
 from ..times import utc_now_float
 
+
 class Recording(SQLModel, table=True):
     """
     A recording is a message exchanged on a conversation. Not necessarily between the assistant and the user.
