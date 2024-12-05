@@ -1,6 +1,6 @@
 import asyncio
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Optional, Tuple
+from typing import AsyncGenerator, Optional
 
 from sqlalchemy.exc import InterfaceError
 from sqlalchemy.ext.asyncio import (
@@ -9,13 +9,11 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from sqlmodel import SQLModel, and_, or_, select
+from sqlmodel import SQLModel, select
 from sqlmodel.sql.expression import _T, SelectOfScalar
 
 from ..constants import IS_TESTING
-from ..logger import logger
 from ..secrets import DATABASE_URL
-from ..times import time_ago_float, time_in_the_future_float, utc_now_float
 from .types import Recording
 
 connection_string = "sqlite+aiosqlite://" if IS_TESTING else DATABASE_URL

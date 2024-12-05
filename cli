@@ -17,10 +17,12 @@ setup() {
 
 devcompile() {
     uv pip compile requirements.in > requirements.txt
+    uv pip compile requirements.in dev-requirements.in > dev-requirements.txt
 }
 
 devsync() {
     uv pip sync requirements.txt
+    uv pip sync dev-requirements.txt
 }
 
 wrap() {
