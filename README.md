@@ -1,8 +1,6 @@
-# nillebco service template
+# {{cookiecutter.project_name}}
 
-simple python service managed with uv
-maximize the ease of use
-fast spin off
+{{cookiecutter.description}}
 
 ## bootstrap
 
@@ -10,4 +8,10 @@ fast spin off
 ./cli installuv
 ./cli devcompile
 ./cli setup
+```
+
+## serve
+
+```bash
+./cli serve
 ```
