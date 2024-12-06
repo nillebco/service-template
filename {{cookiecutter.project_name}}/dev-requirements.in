@@ -5,6 +5,7 @@ mypy
 vcrpy
 pytest
 pytest-vcr
+pytest-cov
 pre-commit
 ruff
 types-PyYAML

@@ -12,3 +12,4 @@ bin/act
 .vscode
 .DS_Store
 research
+.coverage
