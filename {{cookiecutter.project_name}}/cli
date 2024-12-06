@@ -44,7 +44,7 @@ lint() {
 
 test() {
     source .venv/bin/activate
-    python -m pytest -s --cov={{cookiecutter.project_name}}/ --cov=tests --cov-report=term-missing ${@-} --cov-report html "${@:2}"
+    python -m pytest -s --cov=api/ --cov=tests --cov-report=term-missing ${@-} --cov-report html "${@:2}"
 }
 
 wrap() {
