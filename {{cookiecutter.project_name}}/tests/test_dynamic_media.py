@@ -1,5 +1,6 @@
 from api.logic.dynamic_media import ENTRY_RESOLVERS, register_entry_resolver
 
+
 def test_register_entry_resolver():
     assert ENTRY_RESOLVERS == {}
 

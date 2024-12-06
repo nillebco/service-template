@@ -20,7 +20,7 @@ id() {
 setup() {
     uv venv
     source .venv/bin/activate
-    uv pip install -r requirements.txt -r dev-requirements.txt
+    uv pip install -r dev-requirements.txt
 }
 
 devcompile() {
@@ -39,11 +39,12 @@ lint() {
     ruff check .
     ruff format .
     mypy .
+    bandit -r api
 }
 
 test() {
     source .venv/bin/activate
-    python -m pytest "${@:2}"
+    python -m pytest -s --cov={{cookiecutter.project_name}}/ --cov=tests --cov-report=term-missing ${@-} --cov-report html "${@:2}"
 }
 
 wrap() {
