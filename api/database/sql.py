@@ -14,7 +14,7 @@ from sqlmodel.sql.expression import _T, SelectOfScalar
 
 from ..constants import IS_TESTING
 from ..secrets import DATABASE_URL
-from .types import Recording
+from .types import DynamicMedia
 
 connection_string = "sqlite+aiosqlite://" if IS_TESTING else DATABASE_URL
 engine: AsyncEngine = create_async_engine(connection_string, echo=True)
@@ -63,84 +63,22 @@ async def execute_statement(session: AsyncSession, stmt: SelectOfScalar[_T]):
             await asyncio.sleep(0.1)
 
 
-def transport_sender_conversation_id_from_session_id(
-    session_id: str,
-) -> tuple[str, str, str | None]:
-    parts = session_id.split(".")
-    if len(parts) == 3:
-        transport, sender, conversation_id = parts
-    elif len(parts) == 2:
-        transport, sender, conversation_id = parts[0], parts[1], None
-    elif len(parts) == 1:
-        transport, sender, conversation_id = "signal", parts[0], None
-    else:
-        transport, sender, conversation_id = "signal", session_id, None
-    return transport, sender, conversation_id
-
-
-def transport_sender_from_session_id(session_id: str) -> tuple[str, str]:
-    transport, sender, _ = transport_sender_conversation_id_from_session_id(session_id)
-    return transport, sender
-
-
-def conversation_id_from_session_id(session_id: str) -> str | None:
-    _, _, conversation_id = transport_sender_conversation_id_from_session_id(session_id)
-    return conversation_id
-
-
-async def _should_record(session, session_id):
-    return True
-
-
-async def record(
-    session_id: str,
-    query: str,
-    conversation_id: Optional[str],
-    mentions: list,
-    is_mentioning_bot: bool,
+async def get_or_create_media(
+    uid: str,
+    kind: Optional[str] = None,
+    entity_id: Optional[str] = None,
 ):
-    if not query:
-        return
-
     async with session_scope() as session:
-        recording_subscribers = await _should_record(session, session_id)
-        if not recording_subscribers:
-            return
-        transport, sender = transport_sender_from_session_id(session_id)
-        recording_subscribers_ids = [s.id for s in recording_subscribers]
-        recording = Recording(
-            session_id=session_id,
-            transport=transport,
-            sender=sender,
-            subscribers=recording_subscribers_ids,
-            query=query,
-            conversation_id=conversation_id,
-            mentions=mentions,
-            is_mentioning_bot=is_mentioning_bot,
-        )
-        session.add(recording)
+        stmt = select(DynamicMedia).where(DynamicMedia.uid == uid)
+        item = (await execute_statement(session, stmt)).scalars().first()
+        if item:
+            return item
+
+        if not kind or not entity_id:
+            return None
+
+        item = DynamicMedia(uid=uid, kind=kind, entity_id=entity_id)
+        session.add(item)
         await session.commit()
 
-
-async def delete_recordings(session_id: str):
-    async with session_scope() as session:
-        conversation_id = conversation_id_from_session_id(session_id)
-        if conversation_id:
-            stmt = select(Recording).where(Recording.conversation_id == conversation_id)
-        else:
-            stmt = select(Recording).where(Recording.session_id == session_id)
-        recordings = (await execute_statement(session, stmt)).scalars().all()
-        for recording in recordings:
-            await session.delete(recording)
-        await session.commit()
-
-
-async def get_recordings(session_id: str):
-    async with session_scope() as session:
-        conversation_id = conversation_id_from_session_id(session_id)
-        if conversation_id:
-            stmt = select(Recording).where(Recording.conversation_id == conversation_id)
-        else:
-            stmt = select(Recording).where(Recording.session_id == session_id)
-        recordings = (await execute_statement(session, stmt)).scalars().all()
-        return recordings
+        return item

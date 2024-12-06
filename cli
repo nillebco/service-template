@@ -41,6 +41,10 @@ lint() {
     mypy .
 }
 
+test() {
+    source .venv/bin/activate
+    python -m pytest "${@:2}"
+}
 
 wrap() {
     . .venv/bin/activate
@@ -89,6 +93,9 @@ case "$1" in
         ;;
     lint)
         lint
+        ;;
+    test)
+        test $@
         ;;
     wrap)
         wrap $@
