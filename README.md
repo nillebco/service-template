@@ -4,4 +4,4 @@ A simple template for my own personal Python3.12+ server applications utilizing 
 
 To use:
 
-        cruft create https://github.com/nillebco/cookiecutter-python/
+        cruft create https://github.com/nillebco/service-template/
