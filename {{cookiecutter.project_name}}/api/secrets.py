@@ -1,8 +1,10 @@
 import os
 
 import yaml
-
+import dotenv
 from .logger import logger
+
+dotenv.load_dotenv()
 
 PWD = os.path.dirname(os.path.abspath(__file__))
 path = f"{PWD}/../secrets/secrets.yaml"

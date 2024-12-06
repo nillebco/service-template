@@ -42,7 +42,9 @@ pydantic==2.10.3
 pydantic-core==2.27.1
     # via pydantic
 python-dotenv==1.0.1
-    # via uvicorn
+    # via
+    #   -r requirements.in
+    #   uvicorn
 pyyaml==6.0.2
     # via
     #   -r requirements.in

@@ -13,3 +13,4 @@ bin/act
 .DS_Store
 research
 .coverage
+.env
