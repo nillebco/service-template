@@ -13,6 +13,7 @@ from .constants import IS_DEV, API_PREFIX, APP_NAME
 from .logger import logger
 from .version import __version__
 from .routers import dynamic_media
+from .database.sql import create_tables
 
 origins = ["*"]
 
@@ -28,6 +29,7 @@ async def long_running_process_async():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    await create_tables()
     asyncio.create_task(long_running_process_async())
     yield
 
