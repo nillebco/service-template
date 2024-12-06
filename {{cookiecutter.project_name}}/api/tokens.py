@@ -6,12 +6,10 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 SECRET_KEY = get_secret("jwt_signing_key")
 
+
 def create_jwt_token(user_id: str, expires_delta: timedelta = timedelta(hours=1)):
     expire = datetime.now(timezone.utc) + expires_delta
-    payload = {
-        "sub": user_id,
-        "exp": expire.timestamp()
-    }
+    payload = {"sub": user_id, "exp": expire.timestamp()}
     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
     return token
 
