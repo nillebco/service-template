@@ -59,7 +59,7 @@ wrap() {
 
 serve() {
     . .venv/bin/activate
-    uvicorn api.app:app --reload --log-level debug --port 17581
+    IS_DEV=true uvicorn api.app:app --reload --log-level debug --port 17581
 }
 
 build_image() {

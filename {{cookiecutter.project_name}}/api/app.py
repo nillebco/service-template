@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from jinja2 import TemplateNotFound
 
 from .secrets import get_secret
-from .constants import IS_DEV, API_PREFIX
+from .constants import IS_DEV, API_PREFIX, APP_NAME
 from .logger import logger
 from .version import __version__
 from .routers import dynamic_media
@@ -32,8 +32,16 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan, docs_url="/docs" if IS_DEV else None, redoc_url=None)
-
+app = FastAPI(
+    title=APP_NAME,
+    lifespan=lifespan,
+    docs_url="/docs" if IS_DEV else None,
+    redoc_url=None,
+    contact={
+        "name": "{{cookiecutter.full_name}}",
+        "email": "{{cookiecutter.email}}",
+    },
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -45,7 +53,7 @@ app.add_middleware(
 
 @app.get(API_PREFIX)
 def read_api_root():
-    return {"status": "ok", "version": __version__}
+    return {"status": "ok", "version": __version__, "name": APP_NAME}
 
 
 app.include_router(dynamic_media.router, prefix=API_PREFIX)
