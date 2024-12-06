@@ -39,7 +39,7 @@ click==8.1.7
     #   uvicorn
 cookiecutter==2.6.0
     # via cruft
-coverage==7.6.8
+coverage==7.6.9
     # via pytest-cov
 cruft==2.15.0
     # via -r dev-requirements.in
@@ -53,6 +53,8 @@ gitdb==4.0.11
     # via gitpython
 gitpython==3.1.43
     # via cruft
+greenlet==3.1.1
+    # via -r dev-requirements.in
 h11==0.14.0
     # via
     #   httpcore
