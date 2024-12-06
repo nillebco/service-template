@@ -47,6 +47,11 @@ test() {
     python -m pytest -s --cov=api/ --cov=tests --cov-report=term-missing --cov-report html "${@:2}"
 }
 
+pre_commit() {
+    source .venv/bin/activate
+    pre-commit run --all-files
+}
+
 wrap() {
     . .venv/bin/activate
     "${@:2}"
@@ -98,10 +103,13 @@ case "$1" in
     test)
         test $@
         ;;
+    pre-commit)
+        pre_commit
+        ;;
     wrap)
         wrap $@
         ;;
-    build_image)
+    build-image)
         build_image
         ;;
     zapscan)
