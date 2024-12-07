@@ -41,4 +41,8 @@ def _get_media_url(media: DynamicMedia) -> Optional[str]:
 
 async def get_media_url(media_id: str) -> Optional[str]:
     media = await get_dynamic_media(media_id)
+
+    if not media:
+        return None
+
     return _get_media_url(media)
