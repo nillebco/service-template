@@ -13,15 +13,17 @@ RUN apt-get clean && \
     cmake \
     build-essential && \
     apt-get clean && \
-    pip install --upgrade pip
+    addgroup --system appuser && \
+    adduser --system appuser --disabled-login && \
+    chown -R appuser:appuser /app && \
+    pip install --upgrade pip && \
+    pip install uv
 
+USER appuser
 RUN cd /app && \
-    pip install uv && \
-    uv venv && \
+    uv venv --no-cache-dir && \
     . .venv/bin/activate && \
-    uv pip install --no-cache-dir -r requirements.txt && \
-    pip cache purge && \
-    uv cache clean && \
+    uv pip install --no-cache -r requirements.txt && \
     mkdir data secrets
 
 FROM python:3-slim as runner

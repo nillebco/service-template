@@ -72,7 +72,7 @@ build_image() {
     if [ -f $APP_NAME.tar.gz ]; then
         rm $APP_NAME.tar.gz
     fi
-    docker save --format oci-archive nillebco/$APP_NAME:$VERSION > $APP_NAME.tar
+    docker save nillebco/$APP_NAME:$VERSION > $APP_NAME.tar
     gzip $APP_NAME.tar
     sha256sum $APP_NAME.gz
 }
