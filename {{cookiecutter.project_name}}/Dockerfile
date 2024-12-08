@@ -1,11 +1,8 @@
 FROM python:3-slim as builder
 
 ARG PORT 17581
-WORKDIR /app
 
-COPY api/ ./api/
-COPY requirements.txt ./
-COPY static/ ./static/
+WORKDIR /app
 
 RUN apt-get clean && \
     apt-get -y update && \
@@ -19,7 +16,12 @@ RUN apt-get clean && \
     pip install --upgrade pip && \
     pip install uv
 
+COPY api/ ./api/
+COPY requirements.txt ./
+COPY static/ ./static/
+
 USER appuser
+
 RUN cd /app && \
     uv venv --no-cache-dir && \
     . .venv/bin/activate && \
@@ -44,5 +46,6 @@ USER appuser
 WORKDIR /app
 VOLUME [ "/app/data", "/app/secrets" ]
 ENV NUMBA_CACHE_DIR=/app/data
+ENV PORT=$PORT
 EXPOSE $PORT
 CMD [".venv/bin/uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", $PORT]
