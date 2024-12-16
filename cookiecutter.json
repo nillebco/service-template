@@ -4,5 +4,5 @@
     "project_name": "python_project_name",
     "description": "Project short description.",
     "version": "0.0.1",
-    "_copy_without_render": ["zorkflows/pre-commit.yaml"]
+    "_copy_without_render": ["workflows/pre-commit.yaml"]
   }
