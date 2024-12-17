@@ -12,11 +12,16 @@ from sqlalchemy.ext.asyncio import (
 from sqlmodel import SQLModel, select
 from sqlmodel.sql.expression import _T, SelectOfScalar
 
+from ..logger import logger
 from ..constants import IS_TESTING
 from ..secrets import DATABASE_URL
 from .types import DynamicMedia
 
-connection_string = "sqlite+aiosqlite://" if IS_TESTING else DATABASE_URL
+IN_MEMORY_DATABASE = "sqlite+aiosqlite://"
+connection_string = IN_MEMORY_DATABASE if IS_TESTING or not DATABASE_URL else DATABASE_URL
+if connection_string == IN_MEMORY_DATABASE:
+    logger.warning("Using in-memory database")
+
 engine: AsyncEngine = create_async_engine(connection_string, echo=True)
 async_session = async_sessionmaker(
     bind=engine, expire_on_commit=False, class_=AsyncSession
