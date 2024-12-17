@@ -89,5 +89,5 @@ async def catch_all(
         return response
     except TemplateNotFound:
         logger.exception(f"Template not found: index.html when serving {rest_of_path}")
-        with open("website/index.html") as f:
+        with open("static/index.html") as f:
             return HTMLResponse(f.read())
