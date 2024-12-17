@@ -48,4 +48,4 @@ VOLUME [ "/app/data", "/app/secrets" ]
 ENV NUMBA_CACHE_DIR=/app/data
 ENV PORT=$PORT
 EXPOSE $PORT
-CMD [".venv/bin/uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", $PORT]
+CMD ["/bin/sh", "-c", "echo $DATABASE_URL && .venv/bin/uvicorn api.app:app --host 0.0.0.0 --port $PORT"]
