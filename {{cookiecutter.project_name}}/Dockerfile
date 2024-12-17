@@ -1,4 +1,4 @@
-FROM python:3-slim as builder
+FROM python:3.12-slim as builder
 
 ARG PORT 17581
 
@@ -28,7 +28,7 @@ RUN cd /app && \
     uv pip install --no-cache -r requirements.txt && \
     mkdir data secrets
 
-FROM python:3-slim as runner
+FROM python:3.12-slim as runner
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
