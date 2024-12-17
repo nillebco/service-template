@@ -76,7 +76,9 @@ build_image() {
     set -eux
     . .venv/bin/activate
     load_dotenv
-    docker build --build-arg PORT=8017 -t nillebco/$APP_NAME:$VERSION .
+    VERSION=$(python -m api.version)
+    APP_NAME=$(python -m api.app_name)
+    docker build --label "org.opencontainers.image.ref.name=nillebco/$APP_NAME:$VERSION" --build-arg PORT=8017 -t nillebco/$APP_NAME:$VERSION .
     if [ -f $APP_NAME.tar.gz ]; then
         rm $APP_NAME.tar.gz
     fi
