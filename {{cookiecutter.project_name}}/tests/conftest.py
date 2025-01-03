@@ -45,3 +45,14 @@ async def async_client():
 def standard_logging():
     with patch.object(logger, "logger", return_value=logging):
         yield
+
+
+@pytest_asyncio.fixture(scope="module")
+def vcr_config():
+    return {
+        "filter_headers": [
+            ("authorization", "DUMMY"),
+            ("x-api-key", "DUMMY"),
+            ("x-goog-api-key", "DUMMY"),
+        ],
+    }
