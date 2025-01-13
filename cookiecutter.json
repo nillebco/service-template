@@ -4,6 +4,10 @@
     "project_name": "python_project_name",
     "description": "Project short description.",
     "version": "0.0.1",
-    "_copy_without_render": ["workflows/pre-commit.yml"],
-    "_extensions": ["cookiecutter.extensions.RandomStringExtension"]
-  }
+    "_copy_without_render": [
+        "workflows/pre-commit.yml"
+    ],
+    "_extensions": [
+        "cookiecutter.extensions.RandomStringExtension"
+    ]
+}
