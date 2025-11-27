@@ -27,39 +27,24 @@ id() {
 }
 
 setup() {
-    uv venv
-    source .venv/bin/activate
-    uv pip install -r dev-requirements.txt
-    pre-commit install
-}
-
-devcompile() {
-    uv pip compile requirements.in > requirements.txt
-    uv pip compile requirements.in dev-requirements.in > dev-requirements.txt
-}
-
-devsync() {
-    source .venv/bin/activate
-    uv pip sync requirements.txt
-    uv pip sync dev-requirements.txt
+    uv sync
+    uv run prek install
 }
 
 lint() {
     source .venv/bin/activate
     ruff check .
     ruff format .
-    mypy .
+    ty check .
     bandit -r api
 }
 
 test() {
-    source .venv/bin/activate
-    python -m pytest -s --cov=api/ --cov=tests --cov-report=term-missing --cov-report html "${@:2}"
+    uv run python -m pytest -s --cov=api/ --cov=tests --cov-report=term-missing --cov-report html "${@:2}"
 }
 
 pre_commit() {
-    source .venv/bin/activate
-    pre-commit run --all-files
+    uv run prek run --all-files
 }
 
 wrap() {
@@ -118,12 +103,6 @@ case "$1" in
         ;;
     setup)
         setup
-        ;;
-    devcompile)
-        devcompile
-        ;;
-    devsync)
-        devsync
         ;;
     lint)
         lint

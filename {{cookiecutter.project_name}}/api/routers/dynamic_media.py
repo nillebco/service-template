@@ -1,7 +1,7 @@
+from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse, Response
 
 from ..constants import MEDIA_DYNAMIC_API
-from fastapi import APIRouter, Request
 from ..logic.dynamic_media import get_media_url
 
 router = APIRouter(prefix=MEDIA_DYNAMIC_API)

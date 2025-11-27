@@ -1,6 +1,7 @@
-from typing import Optional, Callable
-from ..database.types import DynamicMedia
+from typing import Callable, Optional
+
 from ..database.sql import get_or_create_media
+from ..database.types import DynamicMedia
 
 ENTRY_RESOLVERS = {}
 

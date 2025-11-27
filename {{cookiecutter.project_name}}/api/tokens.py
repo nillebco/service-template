@@ -1,8 +1,10 @@
-from .secrets import get_secret
+from datetime import datetime, timedelta, timezone
+
 import jwt
-from datetime import datetime, timezone, timedelta
-from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+from .secrets import get_secret
 
 SECRET_KEY = get_secret("jwt_signing_key")
 

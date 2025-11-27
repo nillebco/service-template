@@ -8,12 +8,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from jinja2 import TemplateNotFound
 
-from .secrets import get_secret
-from .constants import IS_DEV, API_PREFIX, APP_NAME
-from .logger import logger
-from .version import __version__
-from .routers import dynamic_media
+from .constants import API_PREFIX, APP_NAME, IS_DEV
 from .database.sql import create_tables
+from .logger import logger
+from .routers import dynamic_media
+from .secrets import get_secret
+from .version import __version__
 
 origins = ["*"]
 
@@ -45,7 +45,7 @@ app = FastAPI(
     },
 )
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore[arg-type]
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],

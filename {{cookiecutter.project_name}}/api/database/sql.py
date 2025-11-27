@@ -12,13 +12,15 @@ from sqlalchemy.ext.asyncio import (
 from sqlmodel import SQLModel, select
 from sqlmodel.sql.expression import _T, SelectOfScalar
 
-from ..logger import logger
 from ..constants import IS_TESTING
+from ..logger import logger
 from ..secrets import DATABASE_URL
 from .types import DynamicMedia
 
 IN_MEMORY_DATABASE = "sqlite+aiosqlite://"
-connection_string = IN_MEMORY_DATABASE if IS_TESTING or not DATABASE_URL else DATABASE_URL
+connection_string = (
+    IN_MEMORY_DATABASE if IS_TESTING or not DATABASE_URL else DATABASE_URL
+)
 if connection_string == IN_MEMORY_DATABASE:
     logger.warning("Using in-memory database")
 
@@ -56,8 +58,8 @@ async def create_tables():
 
 
 async def drop_tables():
-    async with engine.begin():
-        await engine.run_sync(SQLModel.metadata.drop_all, engine)
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.drop_all)
 
 
 async def execute_statement(session: AsyncSession, stmt: SelectOfScalar[_T]):

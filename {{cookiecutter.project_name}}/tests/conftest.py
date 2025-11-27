@@ -1,14 +1,15 @@
-from typing import AsyncGenerator
 import logging
+from typing import AsyncGenerator
+from unittest.mock import patch
+
 import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlmodel import SQLModel
-from httpx import AsyncClient
-from unittest.mock import patch
-from api.logger import logger
 
-from api.database.sql import engine as async_engine
 from api.app import app
+from api.database.sql import engine as async_engine
+from api.logger import logger
 
 
 @pytest_asyncio.fixture(scope="function")
@@ -34,7 +35,7 @@ async def async_session() -> AsyncGenerator:
 async def async_client():
     headers = {"Authorization": "Bearer test_token"}
     async with AsyncClient(
-        app=app,
+        transport=ASGITransport(app=app),
         base_url="http://localhost:17581",
         headers=headers,
     ) as client:

@@ -1,7 +1,8 @@
 import os
 
-import yaml
 import dotenv
+import yaml
+
 from .logger import logger
 
 dotenv.load_dotenv()
