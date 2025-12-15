@@ -23,6 +23,9 @@ COPY api/ ./api/
 COPY static/ ./static/
 
 USER appuser
+ENV HOME=/app
+ENV UV_PYTHON_DOWNLOADS=never
+ENV UV_CACHE_DIR=/app/.uv-cache
 
 RUN cd /app && \
     uv sync --frozen --no-cache && \
