@@ -33,14 +33,13 @@ RUN cd /app && \
 
 FROM python:3.12-slim AS runner
 RUN apt-get -y update && \
-    apt-get install -y --no-install-recommends \
-    ffmpeg \
-    pandoc && \
+    apt-get install -y --no-install-recommends ffmpeg pandoc && \
     apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     addgroup --system appuser && \
     adduser --system appuser --disabled-login \
     --ingroup appuser --no-create-home \
-    --home /nonexistent --gecos "nonroot user" --shell /bin/false || true
+    --home /nonexistent --gecos "nonroot user" --shell /bin/false
 
 COPY --from=builder /app/ /app/
 RUN chown -R appuser:appuser /app/data /app/secrets
