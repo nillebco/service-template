@@ -1,8 +1,11 @@
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
-ARG PORT 17581
+ARG PORT=17581
 
 WORKDIR /app
+
+# Copy uv from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 RUN apt-get clean && \
     apt-get -y update && \
@@ -10,25 +13,22 @@ RUN apt-get clean && \
     cmake \
     build-essential && \
     apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     addgroup --system appuser && \
     adduser --system appuser --disabled-login && \
-    chown -R appuser:appuser /app && \
-    pip install --upgrade pip && \
-    pip install uv
+    chown -R appuser:appuser /app
 
+COPY pyproject.toml uv.lock ./
 COPY api/ ./api/
-COPY requirements.txt ./
 COPY static/ ./static/
 
 USER appuser
 
 RUN cd /app && \
-    uv venv --no-cache-dir && \
-    . .venv/bin/activate && \
-    uv pip install --no-cache -r requirements.txt && \
+    uv sync --frozen --no-cache && \
     mkdir data secrets
 
-FROM python:3.12-slim as runner
+FROM python:3.12-slim AS runner
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
