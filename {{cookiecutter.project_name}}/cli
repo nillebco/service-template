@@ -116,7 +116,7 @@ case "$1" in
     wrap)
         wrap $@
         ;;
-    build-image)
+    docker-build)
         build_image
         ;;
     zapscan)
